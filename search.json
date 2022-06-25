@@ -1,0 +1,37 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Resumo",
+    "section": "",
+    "text": "Meu nome é Gabriel, estou cursando o último período de Estatística pela Universidade Federal do Paraná. Atualmente estou trabalhando como Cientista de Dados na Oper. Dentre algumas das minhas responsabilidades estão: tratar e manipular dados, gerar soluções de analytics baseadas em problemas de negócios de uma indústria global de bebidas, automatizar processos com Python, integrar projetos com Azure DevOps (Databricks), criar e manter Dashboards em Shiny para auxiliar a tomada de decisão de gestores, criação e disponibilização de modelos de machine learning como um produto de dados. Anteriormente trabalhei como Assistente Atuarial na Deloitte, uma das quatro maiores empresas de serviços profissionais do mundo. Alguns dos meus hobbies são: jogar xadrez, ler mangás, manhuas e manhwas e praticar artes marciais."
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "1 + 1\n\n[1] 2"
+  },
+  {
+    "objectID": "projetos.html#streamer-stan",
+    "href": "projetos.html#streamer-stan",
+    "title": "Projetos Pessoais",
+    "section": "Streamer Stan",
+    "text": "Streamer Stan"
+  },
+  {
+    "objectID": "projetos.html#chipotle-nearby",
+    "href": "projetos.html#chipotle-nearby",
+    "title": "Projetos Pessoais",
+    "section": "Chipotle Nearby",
+    "text": "Chipotle Nearby\nUm dashboard em Shiny que recebe o endereço do usuário, se conecta com a API do OpenStreetMap, tranforma o endereço recebido para coordenada (latitude e longitude), verifica no banco de dados qual o Chipotle mais perto dessa localiazação e mostra a rota e o endereço para o usuário, além de informações do cardápio e produtos em alta para aquela unidade específica da franquia. Alguns dos pacotes utilizados foram o tidyverse, leflet, tidygeocoder, highcharter e httr. O projeto pode ser encontrado em Chipotle Nearby."
+  },
+  {
+    "objectID": "projetos.html",
+    "href": "projetos.html",
+    "title": "Projetos Pessoais",
+    "section": "",
+    "text": "Um dashboard em Shiny que se conecta com a API da Twitch e obtem dados sobre o streamer escolhido pelo usuário da aplicação. Algumas dessas informações são: qual o tipo de contrato do streamer com a plataforma, data de criação do canal, além de quais são os canais seguidos pelo mesmo. Alguns dos pacotes utilizados foram o tidyverse, twitchr, gtExtras e httr. O projeto pode ser encontrado em Streamer Stan."
+  }
+]
