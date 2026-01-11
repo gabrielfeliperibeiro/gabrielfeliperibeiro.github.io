@@ -1,0 +1,17 @@
+# Djokobilas - Tennis Court Booking Automation
+# Required dependencies
+
+# Web automation
+selenium>=4.15.0
+
+# WebDriver management
+webdriver-manager>=4.0.0
+
+# HTTP requests for notifications
+requests>=2.31.0
+
+# Optional: Schedule tasks
+schedule>=1.2.0
+
+# Optional: Better logging
+colorlog>=6.7.0
