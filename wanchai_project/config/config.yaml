@@ -1,0 +1,113 @@
+# Wanchai Arbitrage Bot Configuration
+# Bitcoin Market Arbitrage on Polymarket
+
+bot:
+  name: "Wanchai Arbitrage Bot"
+  version: "1.0.0"
+  log_level: "INFO"
+  max_concurrent_trades: 10
+  dry_run: true  # Set to false for live trading
+
+# Polymarket Configuration
+polymarket:
+  api_base_url: "https://clob.polymarket.com"
+  gamma_api_url: "https://gamma-api.polymarket.com"
+  websocket_url: "wss://ws-subscriptions-clob.polymarket.com/ws/market"
+  chain_id: 137  # Polygon
+  ctf_exchange: "0x4bFb41d5B3570DeFd03C39a9A4D8dE6Bd8B8982E"
+  neg_risk_ctf_exchange: "0xC5d563A36AE78145C45a50134d48A1215220f80a"
+  usdc_address: "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174"
+
+# Exchange Configurations (for price feeds)
+exchanges:
+  binance:
+    api_base: "https://api.binance.com"
+    websocket_url: "wss://stream.binance.com:9443/ws"
+    rate_limit: 1200  # requests per minute
+
+  coinbase:
+    api_base: "https://api.coinbase.com"
+    websocket_url: "wss://ws-feed.exchange.coinbase.com"
+
+  kraken:
+    api_base: "https://api.kraken.com"
+    websocket_url: "wss://ws.kraken.com"
+
+# Strategy Configurations
+strategies:
+  # Strategy 1: Latency Arbitrage
+  latency_arbitrage:
+    enabled: true
+    min_price_deviation: 0.02  # 2% deviation threshold
+    max_position_size: 35000  # USD
+    execution_window_seconds: 900  # 15 minutes
+    target_markets:
+      - "bitcoin"
+      - "btc"
+      - "crypto"
+
+  # Strategy 2: Near-Resolved Market Sniping
+  near_resolved_sniping:
+    enabled: true
+    min_probability: 0.95  # 95% or higher
+    max_probability: 0.99  # Cap at 99%
+    min_yield: 0.001  # 0.1% minimum yield
+    max_time_to_resolution_hours: 24
+    reinvest_profits: true
+
+  # Strategy 3: Compounding Near-Certain Bets
+  compounding_bets:
+    enabled: true
+    target_win_rate: 0.996  # 99.6%
+    min_certainty: 0.95
+    max_position_pct: 0.1  # Max 10% of bankroll per bet
+    compound_frequency: "immediate"
+
+  # Strategy 4: Yes/No Arbitrage
+  yes_no_arbitrage:
+    enabled: true
+    min_spread: 0.005  # 0.5% minimum arbitrage opportunity
+    max_slippage: 0.01  # 1% max slippage
+    target_profit_pct: 0.03  # Target 3% per opportunity
+
+  # Strategy 5: Spread Trading (Market Making)
+  spread_trading:
+    enabled: true
+    min_spread: 0.02  # 2% minimum spread
+    order_refresh_seconds: 30
+    max_inventory_imbalance: 0.3  # 30% max imbalance
+
+  # Strategy 6: Range Coverage
+  range_coverage:
+    enabled: true
+    max_total_cost: 0.98  # Keep total under $1
+    target_profit_pct: 0.25  # 25% target
+    min_outcomes_covered: 3
+
+  # Strategy 7: Both-Sides Spread
+  both_sides_spread:
+    enabled: true
+    entry_price: 0.50  # Enter at 50c each side
+    exit_loser_threshold: 0.25  # Exit loser at 25c
+    target_profit_pct: 0.25  # 25% target
+
+# Risk Management
+risk:
+  max_daily_loss: 5000  # USD
+  max_position_size: 50000  # USD
+  max_exposure_pct: 0.5  # 50% of bankroll max
+  stop_loss_pct: 0.1  # 10% stop loss
+  take_profit_pct: 0.2  # 20% take profit
+  min_liquidity: 10000  # Minimum market liquidity
+
+# Database
+database:
+  type: "sqlite"
+  path: "data/trades.db"
+
+# Monitoring
+monitoring:
+  telegram_enabled: false
+  discord_enabled: false
+  log_trades: true
+  performance_report_interval: 3600  # seconds
