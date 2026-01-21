@@ -897,31 +897,6 @@
             color: var(--on-surface-variant);
         }
 
-        /* ===== DATA SOURCE BANNER ===== */
-        .data-banner {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: white;
-            padding: var(--space-3) var(--space-5);
-            text-align: center;
-            font-size: 13px;
-            font-weight: 500;
-        }
-
-        .data-banner.demo {
-            background: linear-gradient(135deg, var(--amber) 0%, #e69500 100%);
-            color: #1a1a1a;
-        }
-
-        .data-banner.hidden {
-            display: none;
-        }
-
-        .data-banner a {
-            color: inherit;
-            text-decoration: underline;
-            cursor: pointer;
-        }
-
         /* ===== LAST UPDATED ===== */
         .last-updated {
             font-size: 12px;
@@ -1004,11 +979,6 @@
     <div class="loading-overlay" id="loadingOverlay">
         <div class="loading-spinner"></div>
         <div class="loading-text">Loading dashboard...</div>
-    </div>
-
-    <!-- Data Source Banner -->
-    <div class="data-banner demo hidden" id="dataBanner">
-        Running with simulated data — <a onclick="loadGitHubData()">Reload from GitHub</a>
     </div>
 
     <!-- Navigation -->
@@ -1268,10 +1238,9 @@
     <script>
         // ===== CONFIGURATION =====
         const CONFIG = {
-            // GitHub raw URL for data (update with your repo)
+            // GitHub raw URL for data
             dataUrl: 'https://raw.githubusercontent.com/gabrielfeliperibeiro/gabrielfeliperibeiro.github.io/main/data/orders.json',
-            refreshInterval: 30000, // 30 seconds
-            demoMode: false
+            refreshInterval: 30000 // 30 seconds
         };
 
         let refreshTimer = null;
@@ -1313,14 +1282,12 @@
                 const response = await fetch(CONFIG.dataUrl + '?t=' + Date.now());
                 if (!response.ok) throw new Error('Failed to fetch data');
                 const data = await response.json();
-                CONFIG.demoMode = false;
-                document.getElementById('dataBanner').classList.add('hidden');
                 ordersData = data.orders || data;
                 updateDashboard(ordersData);
                 hideLoading();
             } catch (error) {
-                console.log('GitHub data not available, using demo mode');
-                useDemoMode();
+                console.error('Failed to load data:', error);
+                showError('Failed to load data. Please check your connection and try again.');
             }
         }
 
@@ -1329,56 +1296,29 @@
             refreshBtn.classList.add('spinning');
 
             try {
-                if (CONFIG.demoMode) {
-                    ordersData = generateDemoData();
-                } else {
-                    const response = await fetch(CONFIG.dataUrl + '?t=' + Date.now());
-                    if (!response.ok) throw new Error('Failed to fetch');
-                    const data = await response.json();
-                    ordersData = data.orders || data;
-                }
+                const response = await fetch(CONFIG.dataUrl + '?t=' + Date.now());
+                if (!response.ok) throw new Error('Failed to fetch');
+                const data = await response.json();
+                ordersData = data.orders || data;
                 updateDashboard(ordersData);
                 updateLastUpdated();
             } catch (error) {
                 console.error('Refresh error:', error);
-                if (!CONFIG.demoMode) useDemoMode();
             } finally {
                 refreshBtn.classList.remove('spinning');
             }
         }
 
-        function useDemoMode() {
-            CONFIG.demoMode = true;
-            document.getElementById('dataBanner').classList.remove('hidden');
-            ordersData = generateDemoData();
-            updateDashboard(ordersData);
-            hideLoading();
-        }
-
-        // ===== DEMO DATA GENERATOR =====
-        function generateDemoData() {
-            const statuses = ['PLACED', 'INVOICED', 'DELIVERED', 'CANCELLED'];
-            const channels = ['B2B_APP', 'ECOMMERCE', 'TELESALES', 'CX_TLP'];
-            const orders = [];
-            const baseTime = new Date();
-
-            for (let i = 0; i < 150; i++) {
-                const minutesAgo = Math.floor(Math.random() * 720);
-                const orderTime = new Date(baseTime.getTime() - minutesAgo * 60000);
-                const gmv = Math.random() * 2000 + 100;
-
-                orders.push({
-                    order_number: `PH${String(14700000 + i).padStart(8, '0')}`,
-                    order_status: statuses[Math.floor(Math.random() * (i < 50 ? 2 : 4))],
-                    order_gmv_usd: gmv,
-                    channel: channels[Math.floor(Math.random() * channels.length)],
-                    placement_date: orderTime.toISOString(),
-                    vendor_id: 'vendor-' + Math.floor(Math.random() * 50),
-                    is_last_hour: minutesAgo <= 60 ? 1 : 0
-                });
-            }
-
-            return orders.sort((a, b) => new Date(b.placement_date) - new Date(a.placement_date));
+        function showError(message) {
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            loadingOverlay.innerHTML = `
+                <div style="text-align: center; color: var(--red);">
+                    <div style="font-size: 48px; margin-bottom: 16px;">⚠️</div>
+                    <div style="font-size: 16px; font-weight: 500; margin-bottom: 8px;">Error Loading Data</div>
+                    <div style="font-size: 14px; color: var(--on-surface-variant); margin-bottom: 24px;">${message}</div>
+                    <button onclick="location.reload()" style="padding: 12px 24px; background: var(--primary); color: white; border: none; border-radius: var(--radius-full); cursor: pointer; font-weight: 500;">Retry</button>
+                </div>
+            `;
         }
 
         // ===== DASHBOARD UPDATE =====
