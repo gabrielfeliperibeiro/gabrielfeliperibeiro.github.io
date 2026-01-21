@@ -3,52 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BEES Live Orders Dashboard | Philippines</title>
+    <title>BEES Live Orders | Real-Time Dashboard</title>
     <meta name="description" content="Real-time order tracking dashboard for BEES Philippines operations">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐝</text></svg>">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        /* ===== CSS VARIABLES ===== */
+        /* ===== MODERN SYSTEM FONT STACK ===== */
         :root {
-            /* Primary Colors */
-            --bees-gold: #FFD200;
-            --bees-black: #1A1A1A;
-            --pure-white: #FFFFFF;
-            --off-white: #FAFAFA;
+            /* Typography */
+            --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            --font-mono: 'SF Mono', 'Cascadia Code', 'Roboto Mono', Consolas, monospace;
 
-            /* Secondary Colors */
-            --warm-amber: #FFAA00;
-            --deep-amber: #FF8C00;
-            --charcoal: #333333;
-            --medium-gray: #666666;
-            --light-gray: #E5E5E5;
-            --soft-gray: #F5F5F5;
+            /* Google-Inspired Color Palette */
+            --primary: #1a73e8;
+            --primary-light: #4285f4;
+            --primary-dark: #1557b0;
+            --surface: #ffffff;
+            --surface-variant: #f8f9fa;
+            --surface-elevated: #ffffff;
+            --background: #f0f4f9;
+            --on-surface: #202124;
+            --on-surface-variant: #5f6368;
+            --outline: #dadce0;
+            --outline-variant: #e8eaed;
 
-            /* Semantic Colors */
-            --success: #22C55E;
-            --warning: #F59E0B;
-            --error: #EF4444;
-            --info: #3B82F6;
+            /* Accent Colors */
+            --amber: #f9ab00;
+            --amber-light: #fdd663;
+            --green: #34a853;
+            --green-light: #81c995;
+            --red: #ea4335;
+            --red-light: #f28b82;
+            --blue: #4285f4;
+            --blue-light: #8ab4f8;
+            --purple: #a142f4;
+            --teal: #00897b;
 
-            /* Gradients */
-            --gold-gradient: linear-gradient(135deg, #FFD200 0%, #FFAA00 50%, #FF8C00 100%);
-            --dark-gradient: linear-gradient(135deg, #1A1A1A 0%, #333333 100%);
+            /* Shadows - Google Material Design 3 */
+            --shadow-1: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
+            --shadow-2: 0 1px 2px 0 rgba(60,64,67,0.3), 0 2px 6px 2px rgba(60,64,67,0.15);
+            --shadow-3: 0 1px 3px 0 rgba(60,64,67,0.3), 0 4px 8px 3px rgba(60,64,67,0.15);
+            --shadow-4: 0 2px 3px 0 rgba(60,64,67,0.3), 0 6px 10px 4px rgba(60,64,67,0.15);
+            --shadow-5: 0 4px 4px 0 rgba(60,64,67,0.3), 0 8px 12px 6px rgba(60,64,67,0.15);
 
-            /* Shadows */
-            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
-            --shadow-md: 0 4px 24px rgba(0, 0, 0, 0.08);
-            --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.12);
-            --shadow-glow: 0 0 40px rgba(255, 210, 0, 0.3);
-
-            /* Timing */
-            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
-            --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+            /* Timing Functions */
+            --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+            --ease-decelerate: cubic-bezier(0, 0, 0, 1);
+            --ease-accelerate: cubic-bezier(0.3, 0, 1, 1);
 
             /* Spacing */
-            --container-max: 1400px;
+            --space-1: 4px;
+            --space-2: 8px;
+            --space-3: 12px;
+            --space-4: 16px;
+            --space-5: 24px;
+            --space-6: 32px;
+            --space-7: 48px;
+            --space-8: 64px;
+
+            /* Border Radius */
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+            --radius-full: 9999px;
+
+            /* Container */
+            --container-max: 1440px;
         }
 
-        /* ===== RESET & BASE ===== */
+        /* ===== RESET ===== */
         *, *::before, *::after {
             margin: 0;
             padding: 0;
@@ -57,22 +80,29 @@
 
         html {
             scroll-behavior: smooth;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: var(--off-white);
-            color: var(--bees-black);
+            font-family: var(--font-sans);
+            background: var(--background);
+            color: var(--on-surface);
             line-height: 1.5;
             min-height: 100vh;
             overflow-x: hidden;
         }
 
         /* ===== ANIMATIONS ===== */
-        @keyframes fadeInUp {
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
             from {
                 opacity: 0;
-                transform: translateY(30px);
+                transform: translateY(24px);
             }
             to {
                 opacity: 1;
@@ -80,40 +110,10 @@
             }
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        @keyframes countUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px) scale(0.9);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-
-        @keyframes shimmer {
-            0% { background-position: -200% 0; }
-            100% { background-position: 200% 0; }
-        }
-
         @keyframes slideInRight {
             from {
                 opacity: 0;
-                transform: translateX(30px);
+                transform: translateX(20px);
             }
             to {
                 opacity: 1;
@@ -121,192 +121,224 @@
             }
         }
 
-        @keyframes blink {
-            0%, 50%, 100% { opacity: 1; }
-            25%, 75% { opacity: 0.4; }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.5); opacity: 0; }
         }
 
-        @keyframes ripple {
-            0% {
-                transform: scale(0.8);
-                opacity: 1;
-            }
-            100% {
-                transform: scale(2.4);
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        @keyframes countUp {
+            from {
                 opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
             }
         }
 
-        .animate-in {
-            animation: fadeInUp 0.8s var(--ease-out-expo) forwards;
+        @keyframes scaleIn {
+            from { transform: scale(0.95); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes progressBar {
+            from { transform: scaleX(0); }
+            to { transform: scaleX(1); }
+        }
+
+        .animate-slide-up {
+            animation: slideUp 0.5s var(--ease-decelerate) forwards;
             opacity: 0;
         }
 
-        .animate-in:nth-child(1) { animation-delay: 0ms; }
-        .animate-in:nth-child(2) { animation-delay: 100ms; }
-        .animate-in:nth-child(3) { animation-delay: 200ms; }
-        .animate-in:nth-child(4) { animation-delay: 300ms; }
-        .animate-in:nth-child(5) { animation-delay: 400ms; }
-        .animate-in:nth-child(6) { animation-delay: 500ms; }
+        .delay-1 { animation-delay: 50ms; }
+        .delay-2 { animation-delay: 100ms; }
+        .delay-3 { animation-delay: 150ms; }
+        .delay-4 { animation-delay: 200ms; }
+        .delay-5 { animation-delay: 250ms; }
+        .delay-6 { animation-delay: 300ms; }
 
-        /* ===== HEADER ===== */
-        .header {
-            background: var(--pure-white);
-            border-bottom: 1px solid var(--light-gray);
-            padding: 16px 32px;
+        /* ===== NAVIGATION ===== */
+        .nav {
             position: sticky;
             top: 0;
             z-index: 100;
-            backdrop-filter: blur(20px);
-            background: rgba(255, 255, 255, 0.95);
+            background: var(--surface);
+            border-bottom: 1px solid var(--outline-variant);
         }
 
-        .header-content {
+        .nav-container {
             max-width: var(--container-max);
             margin: 0 auto;
+            padding: 0 var(--space-5);
+            height: 64px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 24px;
+            gap: var(--space-4);
         }
 
-        .logo-section {
+        .nav-brand {
             display: flex;
             align-items: center;
-            gap: 16px;
+            gap: var(--space-3);
+            text-decoration: none;
+            color: var(--on-surface);
         }
 
-        .logo {
-            width: 48px;
-            height: 48px;
-            background: var(--gold-gradient);
-            border-radius: 12px;
+        .nav-logo {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--amber) 0%, var(--amber-light) 100%);
+            border-radius: var(--radius-md);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 28px;
-            box-shadow: var(--shadow-sm);
+            font-size: 22px;
+            box-shadow: var(--shadow-1);
         }
 
-        .brand-text {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .brand-name {
-            font-size: 24px;
-            font-weight: 800;
-            color: var(--bees-black);
-            letter-spacing: -0.02em;
-        }
-
-        .brand-tagline {
-            font-size: 12px;
-            color: var(--medium-gray);
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
+        .nav-title {
+            font-size: 20px;
             font-weight: 500;
+            letter-spacing: -0.01em;
         }
 
-        .header-meta {
-            display: flex;
-            align-items: center;
-            gap: 24px;
+        .nav-title span {
+            color: var(--on-surface-variant);
+            font-weight: 400;
+            margin-left: 4px;
         }
 
-        .live-indicator {
+        .nav-actions {
             display: flex;
             align-items: center;
-            gap: 8px;
-            padding: 8px 16px;
-            background: rgba(34, 197, 94, 0.1);
-            border-radius: 999px;
+            gap: var(--space-3);
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            padding: var(--space-2) var(--space-4);
+            border-radius: var(--radius-full);
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--on-surface-variant);
+            text-decoration: none;
+            transition: all 0.2s var(--ease-standard);
+        }
+
+        .nav-link:hover {
+            background: var(--surface-variant);
+            color: var(--on-surface);
+        }
+
+        .status-chip {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            padding: var(--space-2) var(--space-3);
+            background: rgba(52, 168, 83, 0.1);
+            border-radius: var(--radius-full);
             font-size: 13px;
-            font-weight: 600;
-            color: var(--success);
+            font-weight: 500;
+            color: var(--green);
         }
 
-        .live-dot {
+        .status-dot {
             width: 8px;
             height: 8px;
-            background: var(--success);
+            background: var(--green);
             border-radius: 50%;
             position: relative;
         }
 
-        .live-dot::after {
+        .status-dot::after {
             content: '';
             position: absolute;
-            inset: -4px;
+            inset: 0;
+            background: var(--green);
             border-radius: 50%;
-            background: var(--success);
-            opacity: 0.3;
-            animation: ripple 1.5s infinite;
-        }
-
-        .last-updated {
-            font-size: 13px;
-            color: var(--medium-gray);
+            animation: pulse 2s ease-in-out infinite;
         }
 
         .refresh-btn {
             width: 40px;
             height: 40px;
             border: none;
-            background: var(--soft-gray);
-            border-radius: 10px;
+            background: transparent;
+            border-radius: var(--radius-full);
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.2s ease;
-            color: var(--charcoal);
+            color: var(--on-surface-variant);
+            transition: all 0.2s var(--ease-standard);
         }
 
         .refresh-btn:hover {
-            background: var(--bees-gold);
-            transform: scale(1.05);
+            background: var(--surface-variant);
+            color: var(--primary);
         }
 
         .refresh-btn.spinning svg {
             animation: spin 1s linear infinite;
         }
 
+        .refresh-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+
         /* ===== MAIN LAYOUT ===== */
-        .main-container {
+        .main {
             max-width: var(--container-max);
             margin: 0 auto;
-            padding: 32px;
+            padding: var(--space-5);
         }
 
         /* ===== HERO SECTION ===== */
-        .hero-section {
-            background: var(--dark-gradient);
-            border-radius: 24px;
-            padding: 48px;
-            margin-bottom: 32px;
+        .hero {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            border-radius: var(--radius-xl);
+            padding: var(--space-7);
+            margin-bottom: var(--space-5);
             position: relative;
             overflow: hidden;
+            box-shadow: var(--shadow-3);
         }
 
-        .hero-section::before {
+        .hero::before {
             content: '';
             position: absolute;
-            top: -50%;
-            right: -20%;
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(255, 210, 0, 0.15) 0%, transparent 70%);
+            top: -100px;
+            right: -100px;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
             pointer-events: none;
         }
 
-        .hero-section::after {
-            content: '🐝';
+        .hero::after {
+            content: '';
             position: absolute;
-            top: 20px;
-            right: 40px;
-            font-size: 120px;
-            opacity: 0.1;
+            bottom: -150px;
+            left: -150px;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
+            pointer-events: none;
         }
 
         .hero-content {
@@ -314,253 +346,313 @@
             z-index: 1;
         }
 
-        .hero-title {
-            font-size: 48px;
-            font-weight: 800;
-            color: var(--pure-white);
-            margin-bottom: 8px;
-            letter-spacing: -0.02em;
+        .hero-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+            padding: var(--space-1) var(--space-3);
+            background: rgba(255,255,255,0.2);
+            border-radius: var(--radius-full);
+            font-size: 12px;
+            font-weight: 500;
+            color: white;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+            margin-bottom: var(--space-4);
+            backdrop-filter: blur(10px);
         }
 
-        .hero-title span {
-            color: var(--bees-gold);
+        .hero-title {
+            font-size: clamp(32px, 5vw, 48px);
+            font-weight: 400;
+            color: white;
+            letter-spacing: -0.02em;
+            margin-bottom: var(--space-2);
+            line-height: 1.2;
+        }
+
+        .hero-title strong {
+            font-weight: 600;
         }
 
         .hero-subtitle {
-            font-size: 18px;
-            color: rgba(255, 255, 255, 0.7);
-            margin-bottom: 32px;
+            font-size: 16px;
+            color: rgba(255,255,255,0.8);
+            max-width: 500px;
+        }
+
+        .hero-meta {
+            display: flex;
+            align-items: center;
+            gap: var(--space-5);
+            margin-top: var(--space-5);
+            padding-top: var(--space-5);
+            border-top: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .hero-stat {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .hero-stat-value {
+            font-size: 24px;
+            font-weight: 600;
+            color: white;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .hero-stat-label {
+            font-size: 12px;
+            color: rgba(255,255,255,0.7);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
         }
 
         /* ===== STATS GRID ===== */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 24px;
-            margin-bottom: 32px;
+            gap: var(--space-4);
+            margin-bottom: var(--space-5);
         }
 
         .stat-card {
-            background: var(--pure-white);
-            border-radius: 16px;
-            padding: 28px;
-            box-shadow: var(--shadow-md);
-            border: 1px solid rgba(0, 0, 0, 0.05);
-            transition: all 0.3s var(--ease-out-expo);
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            padding: var(--space-5);
+            box-shadow: var(--shadow-1);
+            border: 1px solid var(--outline-variant);
+            transition: all 0.3s var(--ease-standard);
             position: relative;
             overflow: hidden;
         }
 
         .stat-card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-lg);
+            box-shadow: var(--shadow-3);
+            transform: translateY(-2px);
         }
 
-        .stat-card.highlight {
-            background: var(--gold-gradient);
+        .stat-card.primary {
+            background: linear-gradient(135deg, var(--amber) 0%, #e69500 100%);
+            border: none;
         }
 
-        .stat-card.highlight .stat-label,
-        .stat-card.highlight .stat-number,
-        .stat-card.highlight .stat-change {
-            color: var(--bees-black);
+        .stat-card.primary .stat-icon,
+        .stat-card.primary .stat-value,
+        .stat-card.primary .stat-label,
+        .stat-card.primary .stat-trend {
+            color: white;
+        }
+
+        .stat-card.primary .stat-icon {
+            background: rgba(255,255,255,0.2);
         }
 
         .stat-icon {
             width: 48px;
             height: 48px;
-            border-radius: 12px;
+            border-radius: var(--radius-md);
+            background: var(--surface-variant);
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 24px;
-            margin-bottom: 16px;
-            background: var(--soft-gray);
+            margin-bottom: var(--space-4);
         }
 
-        .stat-card.highlight .stat-icon {
-            background: rgba(0, 0, 0, 0.1);
-        }
-
-        .stat-number {
-            font-size: 42px;
-            font-weight: 700;
-            color: var(--bees-black);
+        .stat-value {
+            font-size: 36px;
+            font-weight: 600;
+            color: var(--on-surface);
             line-height: 1;
             letter-spacing: -0.02em;
-            margin-bottom: 4px;
+            margin-bottom: var(--space-1);
             font-variant-numeric: tabular-nums;
         }
 
         .stat-label {
-            font-size: 14px;
-            color: var(--medium-gray);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
+            font-size: 13px;
+            color: var(--on-surface-variant);
             font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
         }
 
-        .stat-change {
+        .stat-trend {
             display: inline-flex;
             align-items: center;
             gap: 4px;
-            font-size: 13px;
-            font-weight: 600;
-            margin-top: 12px;
-            padding: 4px 10px;
-            border-radius: 20px;
+            margin-top: var(--space-3);
+            padding: var(--space-1) var(--space-2);
+            border-radius: var(--radius-full);
+            font-size: 12px;
+            font-weight: 500;
         }
 
-        .stat-change.positive {
-            background: rgba(34, 197, 94, 0.1);
-            color: var(--success);
+        .stat-trend.up {
+            background: rgba(52, 168, 83, 0.1);
+            color: var(--green);
         }
 
-        .stat-change.negative {
-            background: rgba(239, 68, 68, 0.1);
-            color: var(--error);
+        .stat-trend.down {
+            background: rgba(234, 67, 53, 0.1);
+            color: var(--red);
+        }
+
+        .stat-card.primary .stat-trend {
+            background: rgba(255,255,255,0.2);
         }
 
         /* ===== CONTENT GRID ===== */
         .content-grid {
             display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 24px;
-            margin-bottom: 32px;
+            grid-template-columns: 1.5fr 1fr;
+            gap: var(--space-5);
+            margin-bottom: var(--space-5);
         }
 
-        /* ===== CARD BASE ===== */
+        /* ===== CARD COMPONENT ===== */
         .card {
-            background: var(--pure-white);
-            border-radius: 16px;
-            box-shadow: var(--shadow-md);
-            border: 1px solid rgba(0, 0, 0, 0.05);
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-1);
+            border: 1px solid var(--outline-variant);
             overflow: hidden;
         }
 
         .card-header {
-            padding: 24px 28px;
-            border-bottom: 1px solid var(--light-gray);
+            padding: var(--space-5);
+            border-bottom: 1px solid var(--outline-variant);
             display: flex;
             align-items: center;
             justify-content: space-between;
         }
 
         .card-title {
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--bees-black);
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: var(--space-3);
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--on-surface);
         }
 
         .card-title-icon {
-            font-size: 20px;
+            width: 32px;
+            height: 32px;
+            border-radius: var(--radius-sm);
+            background: var(--surface-variant);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
         }
 
         .card-badge {
+            padding: var(--space-1) var(--space-3);
+            background: var(--surface-variant);
+            border-radius: var(--radius-full);
             font-size: 12px;
-            font-weight: 600;
-            padding: 4px 12px;
-            border-radius: 20px;
-            background: var(--soft-gray);
-            color: var(--charcoal);
+            font-weight: 500;
+            color: var(--on-surface-variant);
         }
 
         .card-body {
-            padding: 24px 28px;
+            padding: var(--space-5);
         }
 
-        /* ===== ORDERS TABLE ===== */
-        .orders-table-container {
-            max-height: 500px;
+        /* ===== DATA TABLE ===== */
+        .table-container {
+            max-height: 440px;
             overflow-y: auto;
         }
 
-        .orders-table {
+        .data-table {
             width: 100%;
             border-collapse: collapse;
         }
 
-        .orders-table th {
+        .data-table th {
             position: sticky;
             top: 0;
-            background: var(--soft-gray);
-            padding: 14px 16px;
+            background: var(--surface-variant);
+            padding: var(--space-3) var(--space-4);
             text-align: left;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: var(--medium-gray);
+            letter-spacing: 0.06em;
+            color: var(--on-surface-variant);
             white-space: nowrap;
         }
 
-        .orders-table td {
-            padding: 14px 16px;
+        .data-table td {
+            padding: var(--space-3) var(--space-4);
             font-size: 14px;
-            border-bottom: 1px solid var(--light-gray);
+            border-bottom: 1px solid var(--outline-variant);
             white-space: nowrap;
         }
 
-        .orders-table tr {
+        .data-table tbody tr {
             transition: background 0.15s ease;
         }
 
-        .orders-table tbody tr:hover {
-            background: rgba(255, 210, 0, 0.05);
+        .data-table tbody tr:hover {
+            background: var(--surface-variant);
         }
 
-        .orders-table tbody tr.new-order {
-            animation: slideInRight 0.5s var(--ease-out-expo);
-            background: rgba(255, 210, 0, 0.1);
+        .data-table tbody tr.new-row {
+            animation: slideInRight 0.4s var(--ease-decelerate);
+            background: rgba(66, 133, 244, 0.05);
         }
 
         .order-id {
-            font-family: 'SF Mono', 'Roboto Mono', monospace;
+            font-family: var(--font-mono);
             font-size: 13px;
-            color: var(--charcoal);
+            color: var(--on-surface);
+            font-weight: 500;
         }
 
-        .order-status {
+        .status-badge {
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            padding: 6px 12px;
-            border-radius: 20px;
+            padding: 4px 12px;
+            border-radius: var(--radius-full);
             font-size: 12px;
-            font-weight: 600;
+            font-weight: 500;
         }
 
-        .order-status.placed {
-            background: rgba(59, 130, 246, 0.1);
-            color: var(--info);
+        .status-badge.placed {
+            background: rgba(66, 133, 244, 0.1);
+            color: var(--blue);
         }
 
-        .order-status.invoiced {
-            background: rgba(245, 158, 11, 0.1);
-            color: var(--warning);
+        .status-badge.invoiced {
+            background: rgba(249, 171, 0, 0.1);
+            color: #c77d00;
         }
 
-        .order-status.delivered {
-            background: rgba(34, 197, 94, 0.1);
-            color: var(--success);
+        .status-badge.delivered {
+            background: rgba(52, 168, 83, 0.1);
+            color: var(--green);
         }
 
-        .order-status.cancelled {
-            background: rgba(239, 68, 68, 0.1);
-            color: var(--error);
+        .status-badge.cancelled {
+            background: rgba(234, 67, 53, 0.1);
+            color: var(--red);
         }
 
         .order-value {
             font-weight: 600;
-            color: var(--bees-black);
+            color: var(--on-surface);
             font-variant-numeric: tabular-nums;
         }
 
         .order-time {
-            color: var(--medium-gray);
+            color: var(--on-surface-variant);
             font-size: 13px;
         }
 
@@ -568,111 +660,121 @@
         .status-list {
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: var(--space-4);
         }
 
         .status-item {
             display: flex;
             align-items: center;
-            gap: 16px;
+            gap: var(--space-4);
         }
 
-        .status-icon {
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
+        .status-item-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-md);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
+            font-size: 18px;
+            flex-shrink: 0;
         }
 
-        .status-icon.placed { background: rgba(59, 130, 246, 0.1); }
-        .status-icon.invoiced { background: rgba(245, 158, 11, 0.1); }
-        .status-icon.delivered { background: rgba(34, 197, 94, 0.1); }
-        .status-icon.cancelled { background: rgba(239, 68, 68, 0.1); }
+        .status-item-icon.placed { background: rgba(66, 133, 244, 0.1); }
+        .status-item-icon.invoiced { background: rgba(249, 171, 0, 0.1); }
+        .status-item-icon.delivered { background: rgba(52, 168, 83, 0.1); }
+        .status-item-icon.cancelled { background: rgba(234, 67, 53, 0.1); }
 
-        .status-info {
+        .status-item-content {
             flex: 1;
+            min-width: 0;
         }
 
-        .status-name {
+        .status-item-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--space-2);
+        }
+
+        .status-item-name {
             font-size: 14px;
+            font-weight: 500;
+            color: var(--on-surface);
+        }
+
+        .status-item-count {
+            font-size: 16px;
             font-weight: 600;
-            color: var(--bees-black);
-            margin-bottom: 6px;
+            color: var(--on-surface);
+            font-variant-numeric: tabular-nums;
         }
 
         .status-bar {
-            height: 8px;
-            background: var(--light-gray);
-            border-radius: 4px;
+            height: 6px;
+            background: var(--outline-variant);
+            border-radius: var(--radius-full);
             overflow: hidden;
         }
 
-        .status-fill {
+        .status-bar-fill {
             height: 100%;
-            border-radius: 4px;
-            transition: width 0.8s var(--ease-out-expo);
+            border-radius: var(--radius-full);
+            transition: width 0.6s var(--ease-decelerate);
+            transform-origin: left;
         }
 
-        .status-fill.placed { background: var(--info); }
-        .status-fill.invoiced { background: var(--warning); }
-        .status-fill.delivered { background: var(--success); }
-        .status-fill.cancelled { background: var(--error); }
+        .status-bar-fill.placed { background: var(--blue); }
+        .status-bar-fill.invoiced { background: var(--amber); }
+        .status-bar-fill.delivered { background: var(--green); }
+        .status-bar-fill.cancelled { background: var(--red); }
 
-        .status-count {
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--bees-black);
-            min-width: 60px;
-            text-align: right;
-        }
-
-        /* ===== CHANNEL BREAKDOWN ===== */
+        /* ===== CHANNEL GRID ===== */
         .channel-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 16px;
+            gap: var(--space-3);
         }
 
         .channel-card {
-            padding: 20px;
-            border-radius: 12px;
-            background: var(--soft-gray);
-            transition: all 0.2s ease;
+            padding: var(--space-4);
+            border-radius: var(--radius-md);
+            background: var(--surface-variant);
+            transition: all 0.2s var(--ease-standard);
+            cursor: default;
         }
 
         .channel-card:hover {
-            background: rgba(255, 210, 0, 0.1);
+            background: rgba(26, 115, 232, 0.05);
         }
 
         .channel-name {
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 600;
-            color: var(--medium-gray);
+            color: var(--on-surface-variant);
             text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 8px;
+            letter-spacing: 0.06em;
+            margin-bottom: var(--space-2);
         }
 
         .channel-value {
             font-size: 28px;
-            font-weight: 700;
-            color: var(--bees-black);
+            font-weight: 600;
+            color: var(--on-surface);
+            letter-spacing: -0.02em;
         }
 
         /* ===== ACTIVITY FEED ===== */
-        .activity-feed {
-            max-height: 400px;
-            overflow-y: auto;
+        .activity-list {
+            display: flex;
+            flex-direction: column;
         }
 
         .activity-item {
             display: flex;
-            gap: 16px;
-            padding: 16px 0;
-            border-bottom: 1px solid var(--light-gray);
+            gap: var(--space-4);
+            padding: var(--space-4) 0;
+            border-bottom: 1px solid var(--outline-variant);
             animation: fadeIn 0.3s ease;
         }
 
@@ -680,7 +782,7 @@
             border-bottom: none;
         }
 
-        .activity-dot {
+        .activity-indicator {
             width: 10px;
             height: 10px;
             border-radius: 50%;
@@ -688,152 +790,142 @@
             flex-shrink: 0;
         }
 
-        .activity-dot.placed { background: var(--info); }
-        .activity-dot.invoiced { background: var(--warning); }
-        .activity-dot.delivered { background: var(--success); }
+        .activity-indicator.placed { background: var(--blue); }
+        .activity-indicator.invoiced { background: var(--amber); }
+        .activity-indicator.delivered { background: var(--green); }
+        .activity-indicator.cancelled { background: var(--red); }
 
         .activity-content {
             flex: 1;
+            min-width: 0;
         }
 
         .activity-text {
             font-size: 14px;
-            color: var(--bees-black);
-            margin-bottom: 4px;
+            color: var(--on-surface);
+            margin-bottom: 2px;
         }
 
         .activity-text strong {
-            color: var(--bees-black);
+            font-weight: 600;
         }
 
-        .activity-time {
+        .activity-meta {
             font-size: 12px;
-            color: var(--medium-gray);
+            color: var(--on-surface-variant);
         }
 
-        /* ===== CHARTS SECTION ===== */
-        .charts-section {
-            margin-bottom: 32px;
-        }
-
-        .chart-container {
-            height: 300px;
-            position: relative;
-        }
-
-        .mini-chart {
+        /* ===== TIMELINE CHART ===== */
+        .timeline-chart {
             display: flex;
             align-items: flex-end;
-            gap: 4px;
-            height: 80px;
-            padding: 16px 0;
+            gap: 3px;
+            height: 100px;
+            padding: var(--space-4) 0;
         }
 
-        .mini-bar {
+        .timeline-bar {
             flex: 1;
-            background: var(--bees-gold);
-            border-radius: 4px 4px 0 0;
-            transition: height 0.5s var(--ease-out-expo);
+            background: linear-gradient(to top, var(--primary) 0%, var(--primary-light) 100%);
+            border-radius: 3px 3px 0 0;
             min-height: 4px;
+            transition: all 0.4s var(--ease-decelerate);
+            cursor: pointer;
         }
 
-        .mini-bar:hover {
-            background: var(--warm-amber);
+        .timeline-bar:hover {
+            background: linear-gradient(to top, var(--primary-dark) 0%, var(--primary) 100%);
+            transform: scaleY(1.1);
+            transform-origin: bottom;
+        }
+
+        .timeline-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            color: var(--on-surface-variant);
+            margin-top: var(--space-2);
         }
 
         /* ===== FOOTER ===== */
         .footer {
             text-align: center;
-            padding: 32px;
-            color: var(--medium-gray);
+            padding: var(--space-6);
+            color: var(--on-surface-variant);
             font-size: 13px;
         }
 
-        .footer a {
-            color: var(--bees-gold);
+        .footer-link {
+            color: var(--primary);
             text-decoration: none;
-            font-weight: 600;
+            font-weight: 500;
         }
 
-        /* ===== LOADING STATES ===== */
+        .footer-link:hover {
+            text-decoration: underline;
+        }
+
+        /* ===== LOADING OVERLAY ===== */
         .loading-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(250, 250, 250, 0.9);
+            background: var(--background);
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            flex-direction: column;
-            gap: 24px;
+            gap: var(--space-5);
             z-index: 1000;
-            backdrop-filter: blur(10px);
         }
 
         .loading-overlay.hidden {
             display: none;
         }
 
-        .spinner {
-            width: 56px;
-            height: 56px;
-            border: 4px solid var(--light-gray);
-            border-top-color: var(--bees-gold);
+        .loading-spinner {
+            width: 48px;
+            height: 48px;
+            border: 3px solid var(--outline-variant);
+            border-top-color: var(--primary);
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
         }
 
         .loading-text {
-            font-size: 16px;
-            font-weight: 600;
-            color: var(--charcoal);
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--on-surface-variant);
         }
 
-        .skeleton {
-            background: linear-gradient(90deg, var(--light-gray) 25%, var(--soft-gray) 50%, var(--light-gray) 75%);
-            background-size: 200% 100%;
-            animation: shimmer 1.5s infinite;
-            border-radius: 8px;
-        }
-
-        /* ===== ERROR STATE ===== */
-        .error-container {
+        /* ===== DATA SOURCE BANNER ===== */
+        .data-banner {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: var(--space-3) var(--space-5);
             text-align: center;
-            padding: 64px 32px;
+            font-size: 13px;
+            font-weight: 500;
         }
 
-        .error-icon {
-            font-size: 64px;
-            margin-bottom: 24px;
+        .data-banner.demo {
+            background: linear-gradient(135deg, var(--amber) 0%, #e69500 100%);
+            color: #1a1a1a;
         }
 
-        .error-title {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--bees-black);
-            margin-bottom: 12px;
+        .data-banner.hidden {
+            display: none;
         }
 
-        .error-message {
-            color: var(--medium-gray);
-            margin-bottom: 24px;
-        }
-
-        .retry-btn {
-            background: var(--bees-gold);
-            color: var(--bees-black);
-            border: none;
-            padding: 14px 32px;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
+        .data-banner a {
+            color: inherit;
+            text-decoration: underline;
             cursor: pointer;
-            transition: all 0.2s ease;
         }
 
-        .retry-btn:hover {
-            background: var(--warm-amber);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 16px rgba(255, 210, 0, 0.4);
+        /* ===== LAST UPDATED ===== */
+        .last-updated {
+            font-size: 12px;
+            color: var(--on-surface-variant);
         }
 
         /* ===== RESPONSIVE ===== */
@@ -847,238 +939,180 @@
         }
 
         @media (max-width: 768px) {
-            .main-container {
-                padding: 16px;
+            .main {
+                padding: var(--space-4);
             }
             .stats-grid {
                 grid-template-columns: 1fr;
             }
-            .hero-section {
-                padding: 32px 24px;
+            .hero {
+                padding: var(--space-5);
             }
             .hero-title {
-                font-size: 32px;
+                font-size: 28px;
             }
-            .header-content {
+            .hero-meta {
                 flex-wrap: wrap;
+                gap: var(--space-4);
             }
-            .header-meta {
-                flex-wrap: wrap;
+            .nav-container {
+                padding: 0 var(--space-4);
+            }
+            .nav-title span {
+                display: none;
+            }
+            .channel-grid {
+                grid-template-columns: 1fr;
             }
         }
 
-        /* ===== SCROLLBAR ===== */
+        /* ===== CUSTOM SCROLLBAR ===== */
         ::-webkit-scrollbar {
             width: 8px;
             height: 8px;
         }
 
         ::-webkit-scrollbar-track {
-            background: var(--soft-gray);
+            background: var(--surface-variant);
             border-radius: 4px;
         }
 
         ::-webkit-scrollbar-thumb {
-            background: var(--light-gray);
+            background: var(--outline);
             border-radius: 4px;
         }
 
         ::-webkit-scrollbar-thumb:hover {
-            background: var(--medium-gray);
+            background: var(--on-surface-variant);
         }
 
-        /* ===== CONFIG MODAL ===== */
-        .config-modal {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.5);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 2000;
-            padding: 24px;
-        }
-
-        .config-modal.hidden {
-            display: none;
-        }
-
-        .config-content {
-            background: var(--pure-white);
-            border-radius: 20px;
-            max-width: 500px;
-            width: 100%;
-            padding: 32px;
-            box-shadow: var(--shadow-lg);
-        }
-
-        .config-title {
-            font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 16px;
-        }
-
-        .config-description {
-            color: var(--medium-gray);
-            margin-bottom: 24px;
-            font-size: 14px;
-        }
-
-        .config-input {
-            width: 100%;
-            padding: 14px 16px;
-            border: 2px solid var(--light-gray);
-            border-radius: 10px;
-            font-size: 14px;
-            transition: border-color 0.2s ease;
-            margin-bottom: 16px;
-        }
-
-        .config-input:focus {
-            outline: none;
-            border-color: var(--bees-gold);
-        }
-
-        .config-submit {
-            width: 100%;
-            background: var(--bees-gold);
-            color: var(--bees-black);
-            border: none;
-            padding: 14px;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .config-submit:hover {
-            background: var(--warm-amber);
-        }
-
-        .demo-mode-banner {
-            background: var(--gold-gradient);
-            color: var(--bees-black);
-            padding: 12px 24px;
-            text-align: center;
-            font-size: 14px;
-            font-weight: 600;
-        }
-
-        .demo-mode-banner a {
-            color: var(--bees-black);
-            text-decoration: underline;
+        /* ===== UTILITY ===== */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            border: 0;
         }
     </style>
 </head>
 <body>
     <!-- Loading Overlay -->
     <div class="loading-overlay" id="loadingOverlay">
-        <div class="spinner"></div>
-        <div class="loading-text">Loading Dashboard...</div>
+        <div class="loading-spinner"></div>
+        <div class="loading-text">Loading dashboard...</div>
     </div>
 
-    <!-- Config Modal -->
-    <div class="config-modal hidden" id="configModal">
-        <div class="config-content">
-            <div class="config-title">Configure API Endpoint</div>
-            <div class="config-description">
-                Enter your Cloudflare Worker URL to connect to Databricks.
-                See the setup guide for deployment instructions.
-            </div>
-            <input type="url" class="config-input" id="apiEndpoint" placeholder="https://your-worker.workers.dev">
-            <button class="config-submit" onclick="saveConfig()">Connect</button>
-            <button class="config-submit" style="background: var(--soft-gray); color: var(--charcoal); margin-top: 12px;" onclick="useDemoMode()">
-                Use Demo Mode
-            </button>
-        </div>
+    <!-- Data Source Banner -->
+    <div class="data-banner demo hidden" id="dataBanner">
+        Running with simulated data — <a onclick="loadGitHubData()">Reload from GitHub</a>
     </div>
 
-    <!-- Demo Mode Banner -->
-    <div class="demo-mode-banner hidden" id="demoBanner">
-        Running in Demo Mode with simulated data - <a href="#" onclick="showConfigModal()">Connect to live data</a>
-    </div>
-
-    <!-- Header -->
-    <header class="header">
-        <div class="header-content">
-            <div class="logo-section">
-                <div class="logo">🐝</div>
-                <div class="brand-text">
-                    <div class="brand-name">BEES</div>
-                    <div class="brand-tagline">Live Orders Dashboard</div>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="#" class="nav-brand">
+                <div class="nav-logo">🐝</div>
+                <div class="nav-title">BEES<span>Dashboard</span></div>
+            </a>
+            <div class="nav-actions">
+                <a href="./profile.html" class="nav-link">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="8" r="4"/>
+                        <path d="M20 21a8 8 0 1 0-16 0"/>
+                    </svg>
+                    Profile
+                </a>
+                <div class="status-chip">
+                    <span class="status-dot"></span>
+                    <span>Live</span>
                 </div>
-            </div>
-            <div class="header-meta">
-                <div class="live-indicator">
-                    <span class="live-dot"></span>
-                    <span>LIVE</span>
-                </div>
-                <div class="last-updated">
-                    Last updated: <span id="lastUpdated">--:--:--</span>
-                </div>
-                <button class="refresh-btn" id="refreshBtn" onclick="refreshData()">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <span class="last-updated" id="lastUpdated">Updated: --:--</span>
+                <button class="refresh-btn" id="refreshBtn" onclick="refreshData()" aria-label="Refresh data">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/>
                     </svg>
                 </button>
             </div>
         </div>
-    </header>
+    </nav>
 
     <!-- Main Content -->
-    <main class="main-container">
+    <main class="main">
         <!-- Hero Section -->
-        <section class="hero-section animate-in">
+        <section class="hero animate-slide-up">
             <div class="hero-content">
-                <h1 class="hero-title">Philippines <span>Orders</span></h1>
-                <p class="hero-subtitle">Real-time tracking of today's order performance across all channels</p>
-                <div id="heroDate" style="color: rgba(255,255,255,0.5); font-size: 14px;">
-                    <!-- Date will be inserted here -->
+                <div class="hero-eyebrow">
+                    <span>Philippines</span>
+                    <span>•</span>
+                    <span id="currentDate">Loading...</span>
+                </div>
+                <h1 class="hero-title">Real-time <strong>Orders</strong> Dashboard</h1>
+                <p class="hero-subtitle">Track order performance, monitor status changes, and analyze channel metrics in real-time.</p>
+                <div class="hero-meta">
+                    <div class="hero-stat">
+                        <div class="hero-stat-value" id="heroTotalOrders">0</div>
+                        <div class="hero-stat-label">Total Orders</div>
+                    </div>
+                    <div class="hero-stat">
+                        <div class="hero-stat-value" id="heroTotalGMV">$0</div>
+                        <div class="hero-stat-label">Total GMV</div>
+                    </div>
+                    <div class="hero-stat">
+                        <div class="hero-stat-value" id="heroActiveVendors">0</div>
+                        <div class="hero-stat-label">Active Vendors</div>
+                    </div>
                 </div>
             </div>
         </section>
 
         <!-- Stats Grid -->
         <section class="stats-grid">
-            <div class="stat-card highlight animate-in">
+            <div class="stat-card primary animate-slide-up delay-1">
                 <div class="stat-icon">📦</div>
-                <div class="stat-number" id="totalOrders">0</div>
+                <div class="stat-value" id="totalOrders">0</div>
                 <div class="stat-label">Total Orders</div>
-                <div class="stat-change positive" id="ordersTrend">
-                    <span>↑</span> <span id="ordersLastHour">0</span> last hour
+                <div class="stat-trend up">
+                    <span>↑</span>
+                    <span id="ordersLastHour">0</span> last hour
                 </div>
             </div>
-            <div class="stat-card animate-in">
+            <div class="stat-card animate-slide-up delay-2">
                 <div class="stat-icon">💰</div>
-                <div class="stat-number" id="totalGMV">$0</div>
+                <div class="stat-value" id="totalGMV">$0</div>
                 <div class="stat-label">Total GMV (USD)</div>
-                <div class="stat-change positive">
-                    <span>↑</span> Growing
+                <div class="stat-trend up">
+                    <span>↑</span>
+                    Growing
                 </div>
             </div>
-            <div class="stat-card animate-in">
+            <div class="stat-card animate-slide-up delay-3">
                 <div class="stat-icon">🏪</div>
-                <div class="stat-number" id="uniqueVendors">0</div>
+                <div class="stat-value" id="uniqueVendors">0</div>
                 <div class="stat-label">Active Vendors</div>
-                <div class="stat-change positive">
-                    <span>↑</span> Active today
+                <div class="stat-trend up">
+                    <span>↑</span>
+                    Active today
                 </div>
             </div>
-            <div class="stat-card animate-in">
+            <div class="stat-card animate-slide-up delay-4">
                 <div class="stat-icon">📊</div>
-                <div class="stat-number" id="avgOrderValue">$0</div>
+                <div class="stat-value" id="avgOrderValue">$0</div>
                 <div class="stat-label">Avg Order Value</div>
-                <div class="stat-change positive" id="avgTrend">
-                    <span>↑</span> Healthy
+                <div class="stat-trend up">
+                    <span>↑</span>
+                    Healthy
                 </div>
             </div>
         </section>
 
-        <!-- Content Grid -->
+        <!-- Content Grid - Row 1 -->
         <section class="content-grid">
             <!-- Orders Table -->
-            <div class="card animate-in">
+            <div class="card animate-slide-up delay-5">
                 <div class="card-header">
                     <h2 class="card-title">
                         <span class="card-title-icon">📋</span>
@@ -1087,8 +1121,8 @@
                     <span class="card-badge" id="tableCount">0 orders</span>
                 </div>
                 <div class="card-body" style="padding: 0;">
-                    <div class="orders-table-container">
-                        <table class="orders-table">
+                    <div class="table-container">
+                        <table class="data-table">
                             <thead>
                                 <tr>
                                     <th>Order ID</th>
@@ -1099,7 +1133,7 @@
                                 </tr>
                             </thead>
                             <tbody id="ordersTableBody">
-                                <!-- Orders will be inserted here -->
+                                <!-- Dynamic content -->
                             </tbody>
                         </table>
                     </div>
@@ -1107,7 +1141,7 @@
             </div>
 
             <!-- Status Breakdown -->
-            <div class="card animate-in">
+            <div class="card animate-slide-up delay-6">
                 <div class="card-header">
                     <h2 class="card-title">
                         <span class="card-title-icon">📊</span>
@@ -1115,56 +1149,64 @@
                     </h2>
                 </div>
                 <div class="card-body">
-                    <div class="status-list" id="statusList">
+                    <div class="status-list">
                         <div class="status-item">
-                            <div class="status-icon placed">📥</div>
-                            <div class="status-info">
-                                <div class="status-name">Placed</div>
+                            <div class="status-item-icon placed">📥</div>
+                            <div class="status-item-content">
+                                <div class="status-item-header">
+                                    <span class="status-item-name">Placed</span>
+                                    <span class="status-item-count" id="placedCount">0</span>
+                                </div>
                                 <div class="status-bar">
-                                    <div class="status-fill placed" id="placedBar" style="width: 0%"></div>
+                                    <div class="status-bar-fill placed" id="placedBar" style="width: 0%"></div>
                                 </div>
                             </div>
-                            <div class="status-count" id="placedCount">0</div>
                         </div>
                         <div class="status-item">
-                            <div class="status-icon invoiced">📄</div>
-                            <div class="status-info">
-                                <div class="status-name">Invoiced</div>
+                            <div class="status-item-icon invoiced">📄</div>
+                            <div class="status-item-content">
+                                <div class="status-item-header">
+                                    <span class="status-item-name">Invoiced</span>
+                                    <span class="status-item-count" id="invoicedCount">0</span>
+                                </div>
                                 <div class="status-bar">
-                                    <div class="status-fill invoiced" id="invoicedBar" style="width: 0%"></div>
+                                    <div class="status-bar-fill invoiced" id="invoicedBar" style="width: 0%"></div>
                                 </div>
                             </div>
-                            <div class="status-count" id="invoicedCount">0</div>
                         </div>
                         <div class="status-item">
-                            <div class="status-icon delivered">✅</div>
-                            <div class="status-info">
-                                <div class="status-name">Delivered</div>
+                            <div class="status-item-icon delivered">✅</div>
+                            <div class="status-item-content">
+                                <div class="status-item-header">
+                                    <span class="status-item-name">Delivered</span>
+                                    <span class="status-item-count" id="deliveredCount">0</span>
+                                </div>
                                 <div class="status-bar">
-                                    <div class="status-fill delivered" id="deliveredBar" style="width: 0%"></div>
+                                    <div class="status-bar-fill delivered" id="deliveredBar" style="width: 0%"></div>
                                 </div>
                             </div>
-                            <div class="status-count" id="deliveredCount">0</div>
                         </div>
                         <div class="status-item">
-                            <div class="status-icon cancelled">❌</div>
-                            <div class="status-info">
-                                <div class="status-name">Cancelled</div>
+                            <div class="status-item-icon cancelled">❌</div>
+                            <div class="status-item-content">
+                                <div class="status-item-header">
+                                    <span class="status-item-name">Cancelled</span>
+                                    <span class="status-item-count" id="cancelledCount">0</span>
+                                </div>
                                 <div class="status-bar">
-                                    <div class="status-fill cancelled" id="cancelledBar" style="width: 0%"></div>
+                                    <div class="status-bar-fill cancelled" id="cancelledBar" style="width: 0%"></div>
                                 </div>
                             </div>
-                            <div class="status-count" id="cancelledCount">0</div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Second Row -->
+        <!-- Content Grid - Row 2 -->
         <section class="content-grid">
-            <!-- Channel Breakdown -->
-            <div class="card animate-in">
+            <!-- Channel Performance -->
+            <div class="card animate-slide-up">
                 <div class="card-header">
                     <h2 class="card-title">
                         <span class="card-title-icon">📡</span>
@@ -1173,47 +1215,45 @@
                 </div>
                 <div class="card-body">
                     <div class="channel-grid" id="channelGrid">
-                        <!-- Channel cards will be inserted here -->
+                        <!-- Dynamic content -->
                     </div>
                 </div>
             </div>
 
             <!-- Activity Feed -->
-            <div class="card animate-in">
+            <div class="card animate-slide-up">
                 <div class="card-header">
                     <h2 class="card-title">
                         <span class="card-title-icon">⚡</span>
                         Live Activity
                     </h2>
                 </div>
-                <div class="card-body" style="padding: 0 28px;">
-                    <div class="activity-feed" id="activityFeed">
-                        <!-- Activity items will be inserted here -->
+                <div class="card-body" style="padding: 0 var(--space-5); max-height: 360px; overflow-y: auto;">
+                    <div class="activity-list" id="activityFeed">
+                        <!-- Dynamic content -->
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- GMV Timeline -->
-        <section class="charts-section">
-            <div class="card animate-in">
-                <div class="card-header">
-                    <h2 class="card-title">
-                        <span class="card-title-icon">📈</span>
-                        Orders Timeline (Last 24 Hours)
-                    </h2>
+        <!-- Timeline Chart -->
+        <section class="card animate-slide-up">
+            <div class="card-header">
+                <h2 class="card-title">
+                    <span class="card-title-icon">📈</span>
+                    Orders Timeline (24 Hours)
+                </h2>
+            </div>
+            <div class="card-body">
+                <div class="timeline-chart" id="timelineChart">
+                    <!-- Dynamic content -->
                 </div>
-                <div class="card-body">
-                    <div class="mini-chart" id="timelineChart">
-                        <!-- Bars will be generated here -->
-                    </div>
-                    <div style="display: flex; justify-content: space-between; font-size: 12px; color: var(--medium-gray); margin-top: 8px;">
-                        <span>00:00</span>
-                        <span>06:00</span>
-                        <span>12:00</span>
-                        <span>18:00</span>
-                        <span>Now</span>
-                    </div>
+                <div class="timeline-labels">
+                    <span>00:00</span>
+                    <span>06:00</span>
+                    <span>12:00</span>
+                    <span>18:00</span>
+                    <span>Now</span>
                 </div>
             </div>
         </section>
@@ -1221,14 +1261,15 @@
 
     <!-- Footer -->
     <footer class="footer">
-        <p>BEES Live Orders Dashboard | Data refreshes every 30 seconds</p>
-        <p style="margin-top: 8px;">Powered by <a href="https://www.bees.com" target="_blank">BEES</a></p>
+        <p>BEES Live Orders Dashboard • Data refreshes every 30 seconds</p>
+        <p style="margin-top: 8px;">Built with vanilla JavaScript • No external dependencies</p>
     </footer>
 
     <script>
         // ===== CONFIGURATION =====
         const CONFIG = {
-            apiEndpoint: localStorage.getItem('bees_api_endpoint') || '',
+            // GitHub raw URL for data (update with your repo)
+            dataUrl: 'https://raw.githubusercontent.com/gabrielfeliperibeiro/gabrielfeliperibeiro.github.io/main/data/orders.json',
             refreshInterval: 30000, // 30 seconds
             demoMode: false
         };
@@ -1239,54 +1280,25 @@
 
         // ===== INITIALIZATION =====
         document.addEventListener('DOMContentLoaded', () => {
-            const heroDate = document.getElementById('heroDate');
-            heroDate.textContent = new Date().toLocaleDateString('en-US', {
-                weekday: 'long',
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-            });
-
-            if (!CONFIG.apiEndpoint) {
-                hideLoading();
-                showConfigModal();
-            } else {
-                initDashboard();
-            }
+            updateCurrentDate();
+            initDashboard();
         });
 
-        // ===== CONFIG FUNCTIONS =====
-        function showConfigModal() {
-            document.getElementById('configModal').classList.remove('hidden');
-        }
-
-        function hideConfigModal() {
-            document.getElementById('configModal').classList.add('hidden');
-        }
-
-        function saveConfig() {
-            const endpoint = document.getElementById('apiEndpoint').value.trim();
-            if (endpoint) {
-                CONFIG.apiEndpoint = endpoint;
-                CONFIG.demoMode = false;
-                localStorage.setItem('bees_api_endpoint', endpoint);
-                hideConfigModal();
-                document.getElementById('demoBanner').classList.add('hidden');
-                initDashboard();
-            }
-        }
-
-        function useDemoMode() {
-            CONFIG.demoMode = true;
-            hideConfigModal();
-            document.getElementById('demoBanner').classList.remove('hidden');
-            initDashboard();
+        function updateCurrentDate() {
+            const dateEl = document.getElementById('currentDate');
+            const now = new Date();
+            dateEl.textContent = now.toLocaleDateString('en-US', {
+                weekday: 'long',
+                month: 'long',
+                day: 'numeric',
+                year: 'numeric'
+            });
         }
 
         // ===== DASHBOARD INITIALIZATION =====
         async function initDashboard() {
             showLoading();
-            await refreshData();
+            await loadGitHubData();
             startAutoRefresh();
         }
 
@@ -1295,94 +1307,90 @@
             refreshTimer = setInterval(refreshData, CONFIG.refreshInterval);
         }
 
-        // ===== DATA FETCHING =====
+        // ===== DATA LOADING =====
+        async function loadGitHubData() {
+            try {
+                const response = await fetch(CONFIG.dataUrl + '?t=' + Date.now());
+                if (!response.ok) throw new Error('Failed to fetch data');
+                const data = await response.json();
+                CONFIG.demoMode = false;
+                document.getElementById('dataBanner').classList.add('hidden');
+                ordersData = data.orders || data;
+                updateDashboard(ordersData);
+                hideLoading();
+            } catch (error) {
+                console.log('GitHub data not available, using demo mode');
+                useDemoMode();
+            }
+        }
+
         async function refreshData() {
             const refreshBtn = document.getElementById('refreshBtn');
             refreshBtn.classList.add('spinning');
 
             try {
-                let data;
                 if (CONFIG.demoMode) {
-                    data = generateDemoData();
+                    ordersData = generateDemoData();
                 } else {
-                    const response = await fetch(`${CONFIG.apiEndpoint}/api/orders`);
-                    if (!response.ok) throw new Error('Failed to fetch data');
-                    const result = await response.json();
-                    data = result.data || [];
+                    const response = await fetch(CONFIG.dataUrl + '?t=' + Date.now());
+                    if (!response.ok) throw new Error('Failed to fetch');
+                    const data = await response.json();
+                    ordersData = data.orders || data;
                 }
-
-                ordersData = data;
-                updateDashboard(data);
+                updateDashboard(ordersData);
                 updateLastUpdated();
-                hideLoading();
             } catch (error) {
-                console.error('Error fetching data:', error);
-                if (!CONFIG.demoMode) {
-                    // Fall back to demo mode on error
-                    CONFIG.demoMode = true;
-                    document.getElementById('demoBanner').classList.remove('hidden');
-                    const demoData = generateDemoData();
-                    ordersData = demoData;
-                    updateDashboard(demoData);
-                }
-                hideLoading();
+                console.error('Refresh error:', error);
+                if (!CONFIG.demoMode) useDemoMode();
             } finally {
                 refreshBtn.classList.remove('spinning');
             }
         }
 
+        function useDemoMode() {
+            CONFIG.demoMode = true;
+            document.getElementById('dataBanner').classList.remove('hidden');
+            ordersData = generateDemoData();
+            updateDashboard(ordersData);
+            hideLoading();
+        }
+
         // ===== DEMO DATA GENERATOR =====
         function generateDemoData() {
             const statuses = ['PLACED', 'INVOICED', 'DELIVERED', 'CANCELLED'];
-            const channels = ['CX_TLP', 'B2B_APP', 'ECOMMERCE', 'TELESALES'];
-            const sources = ['live', 'batch', 'api'];
+            const channels = ['B2B_APP', 'ECOMMERCE', 'TELESALES', 'CX_TLP'];
             const orders = [];
             const baseTime = new Date();
 
-            // Generate 150 orders spread throughout the day
             for (let i = 0; i < 150; i++) {
-                const minutesAgo = Math.floor(Math.random() * 720); // Last 12 hours
+                const minutesAgo = Math.floor(Math.random() * 720);
                 const orderTime = new Date(baseTime.getTime() - minutesAgo * 60000);
                 const gmv = Math.random() * 2000 + 100;
 
                 orders.push({
-                    country: 'PH',
-                    placement_date: orderTime.toISOString(),
-                    vendor_id: generateUUID(),
                     order_number: `PH${String(14700000 + i).padStart(8, '0')}`,
                     order_status: statuses[Math.floor(Math.random() * (i < 50 ? 2 : 4))],
-                    order_gmv: gmv * 56, // PHP
-                    order_gmv_usd: gmv / 56,
-                    account_id: generateUUID(),
-                    vendor_account_id: generateUUID(),
+                    order_gmv_usd: gmv,
                     channel: channels[Math.floor(Math.random() * channels.length)],
-                    source: sources[Math.floor(Math.random() * sources.length)],
-                    minute_aging: -minutesAgo,
-                    is_last_minute: minutesAgo <= 1 ? 1 : 0,
-                    is_last_30_minutes: minutesAgo <= 30 ? 1 : 0,
-                    is_last_hour: minutesAgo <= 60 ? 1 : 0,
-                    is_today: 1
+                    placement_date: orderTime.toISOString(),
+                    vendor_id: 'vendor-' + Math.floor(Math.random() * 50),
+                    is_last_hour: minutesAgo <= 60 ? 1 : 0
                 });
             }
 
             return orders.sort((a, b) => new Date(b.placement_date) - new Date(a.placement_date));
         }
 
-        function generateUUID() {
-            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
-                const r = Math.random() * 16 | 0;
-                return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
-            });
-        }
-
         // ===== DASHBOARD UPDATE =====
         function updateDashboard(orders) {
             updateStats(orders);
+            updateHeroStats(orders);
             updateOrdersTable(orders);
             updateStatusBreakdown(orders);
             updateChannelBreakdown(orders);
             updateActivityFeed(orders);
             updateTimelineChart(orders);
+            updateLastUpdated();
         }
 
         function updateStats(orders) {
@@ -1392,19 +1400,29 @@
             const avgValue = total > 0 ? totalGMV / total : 0;
             const lastHourOrders = orders.filter(o => o.is_last_hour === 1 || o.is_last_hour === '1').length;
 
-            animateNumber('totalOrders', total);
-            animateNumber('totalGMV', totalGMV, true, '$');
-            animateNumber('uniqueVendors', uniqueVendors);
-            animateNumber('avgOrderValue', avgValue, true, '$');
+            animateValue('totalOrders', total);
+            animateValue('totalGMV', totalGMV, true, '$');
+            animateValue('uniqueVendors', uniqueVendors);
+            animateValue('avgOrderValue', avgValue, true, '$');
 
             document.getElementById('ordersLastHour').textContent = lastHourOrders;
             document.getElementById('tableCount').textContent = `${total} orders`;
         }
 
-        function animateNumber(elementId, value, isDecimal = false, prefix = '') {
+        function updateHeroStats(orders) {
+            const total = orders.length;
+            const totalGMV = orders.reduce((sum, o) => sum + (parseFloat(o.order_gmv_usd) || 0), 0);
+            const uniqueVendors = new Set(orders.map(o => o.vendor_id)).size;
+
+            document.getElementById('heroTotalOrders').textContent = total.toLocaleString();
+            document.getElementById('heroTotalGMV').textContent = '$' + totalGMV.toLocaleString('en-US', { maximumFractionDigits: 0 });
+            document.getElementById('heroActiveVendors').textContent = uniqueVendors.toLocaleString();
+        }
+
+        function animateValue(elementId, value, isDecimal = false, prefix = '') {
             const element = document.getElementById(elementId);
             const current = parseFloat(element.textContent.replace(/[^0-9.-]/g, '')) || 0;
-            const duration = 500;
+            const duration = 400;
             const startTime = performance.now();
 
             function update(currentTime) {
@@ -1422,9 +1440,7 @@
                     element.textContent = prefix + Math.round(currentValue).toLocaleString();
                 }
 
-                if (progress < 1) {
-                    requestAnimationFrame(update);
-                }
+                if (progress < 1) requestAnimationFrame(update);
             }
 
             requestAnimationFrame(update);
@@ -1441,9 +1457,9 @@
                 const statusClass = order.order_status.toLowerCase();
 
                 return `
-                    <tr class="${isNew ? 'new-order' : ''}">
+                    <tr class="${isNew && previousOrderIds.size > 0 ? 'new-row' : ''}">
                         <td><span class="order-id">${order.order_number}</span></td>
-                        <td><span class="order-status ${statusClass}">${getStatusIcon(order.order_status)} ${order.order_status}</span></td>
+                        <td><span class="status-badge ${statusClass}">${getStatusIcon(order.order_status)} ${order.order_status}</span></td>
                         <td><span class="order-value">$${parseFloat(order.order_gmv_usd).toFixed(2)}</span></td>
                         <td>${order.channel}</td>
                         <td><span class="order-time">${timeStr}</span></td>
@@ -1455,33 +1471,23 @@
         }
 
         function getStatusIcon(status) {
-            const icons = {
-                'PLACED': '📥',
-                'INVOICED': '📄',
-                'DELIVERED': '✅',
-                'CANCELLED': '❌'
-            };
+            const icons = { 'PLACED': '📥', 'INVOICED': '📄', 'DELIVERED': '✅', 'CANCELLED': '❌' };
             return icons[status] || '📦';
         }
 
         function updateStatusBreakdown(orders) {
             const total = orders.length;
-            const placed = orders.filter(o => o.order_status === 'PLACED').length;
-            const invoiced = orders.filter(o => o.order_status === 'INVOICED').length;
-            const delivered = orders.filter(o => o.order_status === 'DELIVERED').length;
-            const cancelled = orders.filter(o => o.order_status === 'CANCELLED').length;
+            const counts = {
+                placed: orders.filter(o => o.order_status === 'PLACED').length,
+                invoiced: orders.filter(o => o.order_status === 'INVOICED').length,
+                delivered: orders.filter(o => o.order_status === 'DELIVERED').length,
+                cancelled: orders.filter(o => o.order_status === 'CANCELLED').length
+            };
 
-            document.getElementById('placedCount').textContent = placed;
-            document.getElementById('invoicedCount').textContent = invoiced;
-            document.getElementById('deliveredCount').textContent = delivered;
-            document.getElementById('cancelledCount').textContent = cancelled;
-
-            if (total > 0) {
-                document.getElementById('placedBar').style.width = `${(placed / total) * 100}%`;
-                document.getElementById('invoicedBar').style.width = `${(invoiced / total) * 100}%`;
-                document.getElementById('deliveredBar').style.width = `${(delivered / total) * 100}%`;
-                document.getElementById('cancelledBar').style.width = `${(cancelled / total) * 100}%`;
-            }
+            Object.entries(counts).forEach(([status, count]) => {
+                document.getElementById(`${status}Count`).textContent = count;
+                document.getElementById(`${status}Bar`).style.width = total > 0 ? `${(count / total) * 100}%` : '0%';
+            });
         }
 
         function updateChannelBreakdown(orders) {
@@ -1505,21 +1511,17 @@
 
         function updateActivityFeed(orders) {
             const feed = document.getElementById('activityFeed');
-            const recentOrders = orders.slice(0, 10);
-
-            feed.innerHTML = recentOrders.map(order => {
+            feed.innerHTML = orders.slice(0, 10).map(order => {
                 const time = new Date(order.placement_date);
                 const timeAgo = getTimeAgo(time);
                 const statusClass = order.order_status.toLowerCase();
 
                 return `
                     <div class="activity-item">
-                        <div class="activity-dot ${statusClass}"></div>
+                        <div class="activity-indicator ${statusClass}"></div>
                         <div class="activity-content">
-                            <div class="activity-text">
-                                Order <strong>${order.order_number}</strong> - ${order.order_status}
-                            </div>
-                            <div class="activity-time">${timeAgo} via ${order.channel}</div>
+                            <div class="activity-text">Order <strong>${order.order_number}</strong> — ${order.order_status}</div>
+                            <div class="activity-meta">${timeAgo} via ${order.channel}</div>
                         </div>
                     </div>
                 `;
@@ -1539,13 +1541,12 @@
 
             chart.innerHTML = hourlyData.map((count, hour) => {
                 const height = (count / maxCount) * 100;
-                return `<div class="mini-bar" style="height: ${Math.max(height, 5)}%" title="${hour}:00 - ${count} orders"></div>`;
+                return `<div class="timeline-bar" style="height: ${Math.max(height, 4)}%" title="${hour}:00 — ${count} orders"></div>`;
             }).join('');
         }
 
         function getTimeAgo(date) {
             const seconds = Math.floor((new Date() - date) / 1000);
-
             if (seconds < 60) return 'Just now';
             if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`;
             if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ago`;
@@ -1554,10 +1555,9 @@
 
         function updateLastUpdated() {
             const now = new Date();
-            document.getElementById('lastUpdated').textContent = now.toLocaleTimeString('en-US', {
+            document.getElementById('lastUpdated').textContent = 'Updated: ' + now.toLocaleTimeString('en-US', {
                 hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit'
+                minute: '2-digit'
             });
         }
 
