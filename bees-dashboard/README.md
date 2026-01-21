@@ -13,8 +13,25 @@ A stunning real-time orders tracking dashboard built with the BEES brand design 
 - **Hourly Timeline**: Visual chart of order distribution
 - **Demo Mode**: Works without API connection for demonstrations
 - **Secure Architecture**: API token never exposed in frontend
+- **GitHub Actions Auto-Update**: Data can be updated automatically using only GitHub
 
-## Architecture
+## Architecture Options
+
+### Option A: GitHub Actions (Recommended for GitHub-only setup)
+
+```
+┌─────────────────┐     ┌──────────────────────┐     ┌─────────────────┐
+│  GitHub Pages   │◀────│   GitHub Actions     │────▶│   Databricks    │
+│   (Frontend)    │     │  (Scheduled Fetch)   │     │   SQL Endpoint  │
+└─────────────────┘     └──────────────────────┘     └─────────────────┘
+        │                         │
+        └─────────────────────────┘
+              Static JSON files
+```
+
+Data is fetched by GitHub Actions every 15 minutes and stored as static JSON files.
+
+### Option B: Live API (Real-time updates)
 
 ```
 ┌─────────────────┐     ┌──────────────────────┐     ┌─────────────────┐
@@ -23,17 +40,44 @@ A stunning real-time orders tracking dashboard built with the BEES brand design 
 └─────────────────┘     └──────────────────────┘     └─────────────────┘
 ```
 
-The dashboard uses a secure proxy architecture:
-1. **Frontend** (GitHub Pages): Static HTML/CSS/JS dashboard
-2. **API Proxy** (Cloudflare Worker): Securely stores Databricks token
-3. **Backend** (Databricks): SQL warehouse for order data
+Real-time data via Cloudflare Worker proxy (30-second refresh).
 
 ## Quick Start
 
 ### Option 1: Demo Mode
 Simply open the dashboard and click "Use Demo Mode" to see simulated data.
 
-### Option 2: Connect to Databricks
+### Option 2: GitHub Actions Auto-Update (Recommended)
+
+This option uses GitHub Actions to automatically fetch data from Databricks every 15 minutes. No additional services required!
+
+#### Step 1: Configure GitHub Secrets
+
+Go to your repository's **Settings** → **Secrets and variables** → **Actions** → **New repository secret**
+
+Add these secrets:
+
+| Secret Name | Description | Example Value |
+|-------------|-------------|---------------|
+| `DATABRICKS_HOST` | Your Databricks workspace hostname | `adb-1825183661408911.11.azuredatabricks.net` |
+| `DATABRICKS_TOKEN` | Databricks Personal Access Token | `dapi...` |
+| `DATABRICKS_HTTP_PATH` | SQL warehouse HTTP path | `/sql/protocolv1/o/1825183661408911/0523-172047-4vu5f6v7` |
+
+#### Step 2: Enable GitHub Actions
+
+1. Go to your repository's **Actions** tab
+2. If prompted, enable workflows
+3. The "Update BEES Dashboard Data" workflow will run automatically every 15 minutes
+
+#### Step 3: Trigger Initial Data Fetch
+
+1. Go to **Actions** → **Update BEES Dashboard Data**
+2. Click **Run workflow** → **Run workflow**
+3. Wait for the workflow to complete
+
+That's it! The dashboard will now automatically display data from the static JSON files, which are updated every 15 minutes.
+
+### Option 3: Live API with Cloudflare Worker
 
 #### Step 1: Deploy the Cloudflare Worker
 
@@ -149,29 +193,69 @@ The dashboard uses CSS variables for easy theming:
 ```
 bees-dashboard/
 ├── index.html           # Main dashboard (HTML/CSS/JS)
-├── cloudflare-worker.js # Secure API proxy for Databricks
-└── README.md           # This file
+├── cloudflare-worker.js # Secure API proxy for Databricks (Option 3)
+├── scripts/
+│   └── fetch_data.py    # Data fetcher for GitHub Actions (Option 2)
+├── data/                # Auto-generated static JSON files
+│   ├── orders.json      # Current orders data
+│   ├── summary.json     # Aggregated statistics
+│   └── metadata.json    # Last update timestamp
+└── README.md            # This file
+
+.github/
+└── workflows/
+    └── update-bees-data.yml  # GitHub Actions workflow
 ```
 
 ## Troubleshooting
 
-### "Failed to fetch data" Error
+### GitHub Actions Issues
+
+#### Workflow Not Running
+- Go to **Actions** tab and check if workflows are enabled
+- Verify secrets are properly configured (no typos in names)
+- Check workflow run logs for errors
+
+#### Data Not Updating via Actions
+- Go to **Actions** → **Update BEES Dashboard Data** → latest run
+- Check the logs for errors
+- Verify Databricks warehouse is running and accessible
+- Test the token validity in Databricks workspace
+
+#### "databricks-sql-connector" Error
+- The workflow automatically installs dependencies
+- If issues persist, check Python version compatibility
+
+### Cloudflare Worker Issues
+
+#### "Failed to fetch data" Error
 - Check that your Cloudflare Worker is deployed and running
 - Verify the Worker URL in the dashboard configuration
 - Check the Worker logs in Cloudflare dashboard
 
-### Data Not Updating
+#### CORS Errors
+- Add your domain to `ALLOWED_ORIGINS` in Worker settings
+- Include both `http://` and `https://` versions if needed
+
+### General Issues
+
+#### Data Not Updating
 - Ensure the Databricks warehouse is running
 - Check that the token hasn't expired
 - Verify the SQL query returns data
-
-### CORS Errors
-- Add your domain to `ALLOWED_ORIGINS` in Worker settings
-- Include both `http://` and `https://` versions if needed
 
 ## Support
 
 For issues with:
 - **Dashboard UI**: Check browser console for JavaScript errors
+- **GitHub Actions**: Check workflow run logs in Actions tab
 - **API Proxy**: Check Cloudflare Worker logs
 - **Databricks Query**: Test query directly in Databricks workspace
+
+## Data Update Modes
+
+| Mode | Update Frequency | Requirements | Best For |
+|------|------------------|--------------|----------|
+| **GitHub Actions** | Every 15 min | GitHub Secrets | Hands-off automation |
+| **Cloudflare Worker** | Every 30 sec | Cloudflare Account | Real-time monitoring |
+| **Demo Mode** | On refresh | None | Demonstrations |

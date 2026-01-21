@@ -969,6 +969,24 @@
             color: var(--bees-black);
             text-decoration: underline;
         }
+
+        .static-mode-banner {
+            background: linear-gradient(135deg, #22C55E 0%, #16A34A 100%);
+            color: var(--pure-white);
+            padding: 12px 24px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .static-mode-banner a {
+            color: var(--pure-white);
+            text-decoration: underline;
+        }
+
+        .static-mode-banner .data-timestamp {
+            font-family: 'SF Mono', 'Roboto Mono', monospace;
+        }
     </style>
 </head>
 <body>
@@ -997,6 +1015,11 @@
     <!-- Demo Mode Banner -->
     <div class="demo-mode-banner hidden" id="demoBanner">
         Running in Demo Mode with simulated data - <a href="#" onclick="showConfigModal()">Connect to live data</a>
+    </div>
+
+    <!-- Static Mode Banner -->
+    <div class="static-mode-banner hidden" id="staticBanner">
+        Data auto-updated via GitHub Actions (Last sync: <span class="data-timestamp">--:--</span>) - <a href="#" onclick="showConfigModal()">Switch to live API</a>
     </div>
 
     <!-- Header -->
@@ -1221,7 +1244,7 @@
 
     <!-- Footer -->
     <footer class="footer">
-        <p>BEES Live Orders Dashboard | Data refreshes every 30 seconds</p>
+        <p>BEES Live Orders Dashboard | <span id="refreshInfo">Data refreshes every 30 seconds</span></p>
         <p style="margin-top: 8px;">Powered by <a href="https://www.bees.com" target="_blank">BEES</a></p>
     </footer>
 
@@ -1230,7 +1253,9 @@
         const CONFIG = {
             apiEndpoint: localStorage.getItem('bees_api_endpoint') || '',
             refreshInterval: 30000, // 30 seconds
-            demoMode: false
+            demoMode: false,
+            staticMode: false, // Use GitHub-hosted static JSON files
+            staticDataPath: './data' // Path to static JSON files
         };
 
         let refreshTimer = null;
@@ -1238,7 +1263,7 @@
         let previousOrderIds = new Set();
 
         // ===== INITIALIZATION =====
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
             const heroDate = document.getElementById('heroDate');
             heroDate.textContent = new Date().toLocaleDateString('en-US', {
                 weekday: 'long',
@@ -1247,13 +1272,32 @@
                 day: 'numeric'
             });
 
-            if (!CONFIG.apiEndpoint) {
+            // Check for static data first (GitHub Actions mode)
+            const hasStaticData = await checkStaticData();
+
+            if (hasStaticData) {
+                CONFIG.staticMode = true;
+                initDashboard();
+            } else if (!CONFIG.apiEndpoint) {
                 hideLoading();
                 showConfigModal();
             } else {
                 initDashboard();
             }
         });
+
+        // Check if static JSON data files exist
+        async function checkStaticData() {
+            try {
+                const response = await fetch(`${CONFIG.staticDataPath}/metadata.json`, {
+                    method: 'HEAD',
+                    cache: 'no-cache'
+                });
+                return response.ok;
+            } catch {
+                return false;
+            }
+        }
 
         // ===== CONFIG FUNCTIONS =====
         function showConfigModal() {
@@ -1286,6 +1330,18 @@
         // ===== DASHBOARD INITIALIZATION =====
         async function initDashboard() {
             showLoading();
+
+            // Show appropriate banner and update footer
+            const refreshInfo = document.getElementById('refreshInfo');
+            if (CONFIG.staticMode) {
+                document.getElementById('staticBanner').classList.remove('hidden');
+                // Use longer refresh interval for static mode (5 min) since data updates less frequently
+                CONFIG.refreshInterval = 300000;
+                refreshInfo.textContent = 'Data auto-updated via GitHub Actions every 15 minutes';
+            } else if (CONFIG.demoMode) {
+                refreshInfo.textContent = 'Demo mode - showing simulated data';
+            }
+
             await refreshData();
             startAutoRefresh();
         }
@@ -1304,6 +1360,9 @@
                 let data;
                 if (CONFIG.demoMode) {
                     data = generateDemoData();
+                } else if (CONFIG.staticMode) {
+                    // Fetch from static JSON files (GitHub Actions mode)
+                    data = await fetchStaticData();
                 } else {
                     const response = await fetch(`${CONFIG.apiEndpoint}/api/orders`);
                     if (!response.ok) throw new Error('Failed to fetch data');
@@ -1329,6 +1388,26 @@
             } finally {
                 refreshBtn.classList.remove('spinning');
             }
+        }
+
+        // Fetch data from static JSON files
+        async function fetchStaticData() {
+            const cacheBuster = `?t=${Date.now()}`;
+            const response = await fetch(`${CONFIG.staticDataPath}/orders.json${cacheBuster}`);
+            if (!response.ok) throw new Error('Failed to fetch static data');
+            const result = await response.json();
+
+            // Update the "last updated" display with the data timestamp
+            if (result.updated_at) {
+                const dataTime = new Date(result.updated_at);
+                const staticBanner = document.getElementById('staticBanner');
+                if (staticBanner) {
+                    staticBanner.querySelector('.data-timestamp').textContent =
+                        dataTime.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+                }
+            }
+
+            return result.orders || [];
         }
 
         // ===== DEMO DATA GENERATOR =====

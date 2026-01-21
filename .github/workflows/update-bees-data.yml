@@ -1,0 +1,79 @@
+name: Update BEES Dashboard Data
+
+on:
+  schedule:
+    # Run every 15 minutes during business hours (6 AM - 10 PM PHT / UTC+8)
+    - cron: '*/15 * * * *'
+  workflow_dispatch:  # Allow manual trigger
+    inputs:
+      force_update:
+        description: 'Force update even if no changes'
+        required: false
+        default: 'false'
+
+env:
+  DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+  DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+  DATABRICKS_HTTP_PATH: ${{ secrets.DATABRICKS_HTTP_PATH }}
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          pip install databricks-sql-connector pandas
+
+      - name: Fetch data from Databricks
+        id: fetch_data
+        run: |
+          python bees-dashboard/scripts/fetch_data.py
+        continue-on-error: true
+
+      - name: Check if data fetch was successful
+        if: steps.fetch_data.outcome == 'failure'
+        run: |
+          echo "::warning::Data fetch failed, keeping existing data"
+          exit 0
+
+      - name: Check for changes
+        id: check_changes
+        run: |
+          git diff --quiet bees-dashboard/data/ || echo "changes=true" >> $GITHUB_OUTPUT
+
+      - name: Commit and push changes
+        if: steps.check_changes.outputs.changes == 'true' || github.event.inputs.force_update == 'true'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add bees-dashboard/data/
+          git commit -m "Auto-update BEES dashboard data [$(date -u +'%Y-%m-%d %H:%M UTC')]"
+          git push
+
+      - name: Summary
+        run: |
+          echo "## Data Update Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ -f bees-dashboard/data/orders.json ]; then
+            echo "- **Orders file**: Updated" >> $GITHUB_STEP_SUMMARY
+            echo "- **File size**: $(stat -f%z bees-dashboard/data/orders.json 2>/dev/null || stat -c%s bees-dashboard/data/orders.json) bytes" >> $GITHUB_STEP_SUMMARY
+          fi
+          if [ -f bees-dashboard/data/summary.json ]; then
+            echo "- **Summary file**: Updated" >> $GITHUB_STEP_SUMMARY
+          fi
+          echo "- **Last updated**: $(date -u +'%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
